@@ -1,9 +1,9 @@
 {
-  "name": "fatorise-fullstack",
+  "name": "fatorise-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./src/index.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
