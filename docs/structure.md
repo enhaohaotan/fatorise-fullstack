@@ -57,14 +57,14 @@
 }
 ```
 
-| Field     | Type              | Required | Description           |
-| --------- | ----------------- | -------- | --------------------- |
-| id        | string (UUID)     | auto     | Unique identifier     |
-| email     | string            | ✅       | Unique email address  |
-| password  | string            | ✅       | Hashed password       |
-| name      | string \| null    | ❌       | Optional display name |
-| createdAt | string (ISO 8601) | auto     | Creation timestamp    |
-| updatedAt | string (ISO 8601) | auto     | Last update timestamp |
+| Field     | Type              | Required | Description                         |
+| --------- | ----------------- | -------- | ----------------------------------- |
+| id        | string (UUID)     | auto     | Unique identifier                   |
+| email     | string            | ✅       | Unique email address                |
+| password  | string            | ✅       | Hashed password (6-127 chars)       |
+| name      | string \| null    | ❌       | Optional display name (1-255 chars) |
+| createdAt | string (ISO 8601) | auto     | Creation timestamp                  |
+| updatedAt | string (ISO 8601) | auto     | Last update timestamp               |
 
 ### 3.2 Task
 
@@ -80,15 +80,15 @@
 }
 ```
 
-| Field       | Type              | Required | Description              |
-| ----------- | ----------------- | -------- | ------------------------ |
-| id          | string (UUID)     | auto     | Unique identifier        |
-| title       | string            | ✅       | Task title (1-255 chars) |
-| description | string \| null    | ❌       | Optional description     |
-| completed   | boolean           | ❌       | Default: false           |
-| userId      | string (UUID)     | ✅       | Owner user ID            |
-| createdAt   | string (ISO 8601) | auto     | Creation timestamp       |
-| updatedAt   | string (ISO 8601) | auto     | Last update timestamp    |
+| Field       | Type              | Required | Description                           |
+| ----------- | ----------------- | -------- | ------------------------------------- |
+| id          | string (UUID)     | auto     | Unique identifier                     |
+| title       | string            | ✅       | Task title (1-255 chars)              |
+| description | string \| null    | ❌       | Optional description (max 1000 chars) |
+| completed   | boolean           | ❌       | Default: false                        |
+| userId      | string (UUID)     | ✅       | Owner user ID                         |
+| createdAt   | string (ISO 8601) | auto     | Creation timestamp                    |
+| updatedAt   | string (ISO 8601) | auto     | Last update timestamp                 |
 
 ## 4. Endpoints
 
@@ -142,10 +142,10 @@
 }
 ```
 
-| Field       | Type   | Required | Description              |
-| ----------- | ------ | -------- | ------------------------ |
-| title       | string | ✅       | Task title (1-255 chars) |
-| description | string | ❌       | Optional description     |
+| Field       | Type   | Required | Description                           |
+| ----------- | ------ | -------- | ------------------------------------- |
+| title       | string | ✅       | Task title (1-255 chars)              |
+| description | string | ❌       | Optional description (max 1000 chars) |
 
 **Response:** `201 Created`
 
@@ -168,7 +168,7 @@
 
 ### 4.4 Update Task
 
-`PUT /tasks/{id}`
+`PATCH /tasks/{id}`
 
 **Path Parameters:**
 
@@ -184,11 +184,13 @@
 }
 ```
 
-| Field       | Type           | Required | Description       |
-| ----------- | -------------- | -------- | ----------------- |
-| title       | string         | ❌       | New title         |
-| description | string \| null | ❌       | New description   |
-| completed   | boolean        | ❌       | Completion status |
+| Field       | Type           | Required | Description                      |
+| ----------- | -------------- | -------- | -------------------------------- |
+| title       | string         | ❌       | New title (1-255 chars)          |
+| description | string \| null | ❌       | New description (max 1000 chars) |
+| completed   | boolean        | ❌       | Completion status                |
+
+> **Note:** At least one field must be provided.
 
 **Response:** `200 OK`
 
@@ -231,3 +233,80 @@
 **Errors:**
 
 - `404` - Task not found
+
+## 5. Auth Endpoints
+
+### 5.1 Sign Up
+
+`POST /auth/signup`
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "yourpassword",
+  "name": "John Doe"
+}
+```
+
+| Field    | Type   | Required | Description                |
+| -------- | ------ | -------- | -------------------------- |
+| email    | string | ✅       | Email address              |
+| password | string | ✅       | Password (6-127 chars)     |
+| name     | string | ❌       | Display name (1-255 chars) |
+
+**Response:** `201 Created`
+
+```json
+{
+  "data": {
+    "id": "a1b2c3d4-5e6f-7890-abcd-ef1234567890",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "createdAt": "2025-12-23T12:34:56.000Z",
+    "updatedAt": "2025-12-23T12:34:56.000Z"
+  }
+}
+```
+
+**Errors:**
+
+- `400` - Validation error (invalid email, password too short/long, etc.)
+
+### 5.2 Sign In
+
+`POST /auth/signin`
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "yourpassword"
+}
+```
+
+| Field    | Type   | Required | Description            |
+| -------- | ------ | -------- | ---------------------- |
+| email    | string | ✅       | Email address          |
+| password | string | ✅       | Password (6-127 chars) |
+
+**Response:** `200 OK`
+
+```json
+{
+  "data": {
+    "id": "a1b2c3d4-5e6f-7890-abcd-ef1234567890",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "createdAt": "2025-12-23T12:34:56.000Z",
+    "updatedAt": "2025-12-23T12:34:56.000Z"
+  }
+}
+```
+
+**Errors:**
+
+- `400` - Validation error (invalid email, password too short/long)
+- `401` - Invalid credentials
