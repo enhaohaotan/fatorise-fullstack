@@ -44,7 +44,29 @@
 
 ## 3. Data Model
 
-### 3.1 Task
+### 3.1 User
+
+```json
+{
+  "id": "a1b2c3d4-5e6f-7890-abcd-ef1234567890",
+  "email": "user@example.com",
+  "password": "hashed_password",
+  "name": "John Doe",
+  "createdAt": "2025-12-23T12:34:56.000Z",
+  "updatedAt": "2025-12-23T12:34:56.000Z"
+}
+```
+
+| Field     | Type              | Required | Description           |
+| --------- | ----------------- | -------- | --------------------- |
+| id        | string (UUID)     | auto     | Unique identifier     |
+| email     | string            | ✅       | Unique email address  |
+| password  | string            | ✅       | Hashed password       |
+| name      | string \| null    | ❌       | Optional display name |
+| createdAt | string (ISO 8601) | auto     | Creation timestamp    |
+| updatedAt | string (ISO 8601) | auto     | Last update timestamp |
+
+### 3.2 Task
 
 ```json
 {
@@ -52,6 +74,7 @@
   "title": "Buy milk",
   "description": "2% or oat",
   "completed": false,
+  "userId": "a1b2c3d4-5e6f-7890-abcd-ef1234567890",
   "createdAt": "2025-12-23T12:34:56.000Z",
   "updatedAt": "2025-12-23T12:34:56.000Z"
 }
@@ -63,6 +86,7 @@
 | title       | string            | ✅       | Task title (1-255 chars) |
 | description | string \| null    | ❌       | Optional description     |
 | completed   | boolean           | ❌       | Default: false           |
+| userId      | string (UUID)     | ✅       | Owner user ID            |
 | createdAt   | string (ISO 8601) | auto     | Creation timestamp       |
 | updatedAt   | string (ISO 8601) | auto     | Last update timestamp    |
 
