@@ -65,3 +65,6 @@ export const UpdateTaskBodySchema = z
       message: "At least one field must be provided.",
     }
   );
+
+export type CreateTaskBody = z.infer<typeof CreateTaskBodySchema>;
+export type UpdateTaskBody = z.infer<typeof UpdateTaskBodySchema>;

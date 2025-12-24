@@ -6,7 +6,7 @@ export const SignUpBodySchema = z
       (v) => (typeof v === "string" ? v.trim().toLowerCase() : v),
       z.email()
     ),
-    password: z.string(),
+    password: z.string().min(6).max(127),
 
     // Trim whitespace; convert empty string to undefined
     name: z.preprocess((v) => {
@@ -14,7 +14,7 @@ export const SignUpBodySchema = z
       if (typeof v !== "string") return v;
       const s = v.trim();
       return s === "" ? undefined : s;
-    }, z.string().optional()),
+    }, z.string().min(1).max(255).optional()),
   })
   .strict();
 
@@ -24,6 +24,9 @@ export const SignInBodySchema = z
       (v) => (typeof v === "string" ? v.trim().toLowerCase() : v),
       z.email()
     ),
-    password: z.string(),
+    password: z.string().min(6).max(127),
   })
   .strict();
+
+export type SignUpBody = z.infer<typeof SignUpBodySchema>;
+export type SignInBody = z.infer<typeof SignInBodySchema>;
