@@ -16,12 +16,10 @@ export async function postUserSignUp(req: Request, res: Response) {
 export async function postUserSignIn(req: Request, res: Response) {
   const user = await Auth.signIn(req.body);
   const token = await signAccessToken({ sub: user.id });
-  res
-    .status(200)
-    .json({
-      data: {
-        token,
-        user: { id: user.id, email: user.email, name: user.name },
-      },
-    });
+  res.status(200).json({
+    data: {
+      token,
+      user: { id: user.id, email: user.email, name: user.name },
+    },
+  });
 }

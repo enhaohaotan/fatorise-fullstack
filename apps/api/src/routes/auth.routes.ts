@@ -5,16 +5,18 @@ import {
   SignUpBodySchema,
 } from "../validaiton/user.schemas.js";
 import * as UserController from "../controllers/auth.controllers.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const authRouter = Router();
 
 authRouter.post(
   "/signup",
   validateBody(SignUpBodySchema),
-  UserController.postUserSignUp
+  asyncHandler(UserController.postUserSignUp)
 );
+
 authRouter.post(
   "/signin",
   validateBody(SignInBodySchema),
-  UserController.postUserSignIn
+  asyncHandler(UserController.postUserSignIn)
 );
