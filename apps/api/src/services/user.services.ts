@@ -32,4 +32,5 @@ export async function signIn(input: SignInBody) {
   if (!user || !ok) {
     throw new HttpError(401, "INVALID_CREDENTIALS", "Invalid credentials");
   }
+  return user;
 }

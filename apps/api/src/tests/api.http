@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:3000
+
+### Signup without name
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test1@example.com",
+  "password": "12345678"
+}
+
+### Signup with name
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test2@example.com",
+  "password": "12345678",
+  "name": "Test User"
+}
+
+### Signin
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test1@example.com",
+  "password": "12345678"
+}
+
+### Health Check
+GET {{baseUrl}}/health
