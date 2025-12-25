@@ -2,7 +2,7 @@ import * as z from "zod";
 
 export const TaskIdParamsSchema = z
   .object({
-    taskId: z.uuid(),
+    id: z.uuid(),
   })
   .strict();
 
