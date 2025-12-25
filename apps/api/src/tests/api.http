@@ -1,5 +1,8 @@
 @baseUrl = http://localhost:3000
 
+### Health Check
+GET {{baseUrl}}/health
+
 ### Signup without name
 POST {{baseUrl}}/auth/signup
 Content-Type: application/json
@@ -28,5 +31,12 @@ Content-Type: application/json
   "password": "12345678"
 }
 
-### Health Check
-GET {{baseUrl}}/health
+### Signin (wrong password)
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test1@example.com",
+  "password": "wrongpassword"
+}
+

@@ -30,7 +30,11 @@ export async function signIn(input: SignInBody) {
   const hashToCompare = user?.passwordHash ?? process.env.DUMMY_BCRYPT_HASH!;
   const ok = await bcrypt.compare(input.password, hashToCompare);
   if (!user || !ok) {
-    throw new HttpError(401, "INVALID_CREDENTIALS", "Invalid credentials");
+    throw new HttpError(
+      401,
+      "INVALID_CREDENTIALS",
+      "Invalid email or password"
+    );
   }
   return user;
 }
