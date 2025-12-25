@@ -4,7 +4,7 @@ import {
   SignInBodySchema,
   SignUpBodySchema,
 } from "../validaiton/user.schemas.js";
-import * as UserController from "../controllers/user.controllers.js";
+import * as UserController from "../controllers/auth.controllers.js";
 
 export const authRouter = Router();
 
