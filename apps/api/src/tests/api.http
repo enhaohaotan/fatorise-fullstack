@@ -1,0 +1,89 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+### Health Check
+GET {{baseUrl}}/health
+
+### Signup without name
+POST {{baseUrl}}/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "email": "test1@example.com",
+  "password": "12345678"
+}
+
+### Signup with name
+POST {{baseUrl}}/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "email": "test2@example.com",
+  "password": "12345678",
+  "name": "Test User"
+}
+
+### Signin
+POST {{baseUrl}}/auth/signin
+Content-Type: {{contentType}}
+
+{
+  "email": "test1@example.com",
+  "password": "12345678"
+}
+
+### Signin (wrong password)
+POST {{baseUrl}}/auth/signin
+Content-Type: {{contentType}}
+
+{
+  "email": "test1@example.com",
+  "password": "wrongpassword"
+}
+
+###
+# @name signin
+POST {{baseUrl}}/auth/signin
+Content-Type: {{contentType}}
+
+{
+  "email": "test1@example.com",
+  "password": "12345678"
+}
+
+###
+@token = {{signin.response.body.$.data.token}}
+
+### Create Task
+# @name task
+POST {{baseUrl}}/tasks
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "title": "Test Task",
+  "description": "This is my test task"
+}
+
+### List All Tasks
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{token}}
+
+###
+@taskId = {{task.response.body.$.data.id}}
+
+### Update Task
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "completed": true
+}
+
+### Delete Task
+DELETE {{baseUrl}}/tasks/{{taskId}}
+content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+
