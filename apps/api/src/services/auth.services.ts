@@ -11,6 +11,7 @@ export async function signUp(input: SignUpBody) {
     throw new HttpError(409, "USER_ALREADY_EXISTS", "User already exists");
   }
 
+  // Hash the password before storing it
   const passwordHash = await bcrypt.hash(input.password, 12);
   return prisma.user.create({
     data: {

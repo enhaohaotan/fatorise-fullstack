@@ -3,6 +3,7 @@ import { healthRouter } from "./routes/health.routes.js";
 import { errroMiddeleware } from "./middlewares/error.middlewares.js";
 import cors from "cors";
 import { authRouter } from "./routes/auth.routes.js";
+import { tasksRouter } from "./routes/tasks.routes.js";
 
 export function createApp() {
   const app = express();
@@ -12,6 +13,7 @@ export function createApp() {
 
   app.use("/health", healthRouter);
   app.use("/auth", authRouter);
+  app.use("/tasks", tasksRouter);
 
   app.use(errroMiddeleware);
 
