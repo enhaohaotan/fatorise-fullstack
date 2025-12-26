@@ -12,6 +12,7 @@ import { SignUpBody, SignUpBodySchema } from "@repo/shared";
 import * as z from "zod";
 import { signUp } from "@/src/api/auth";
 import { router } from "expo-router";
+import { saveToken } from "@/src/utils/token";
 
 export default function SignUpScreen() {
   const borderColor = useThemeColor({}, "borderColor");
@@ -57,6 +58,7 @@ export default function SignUpScreen() {
     try {
       setSubmitting(true);
       const auth = await signUp(input);
+      await saveToken(auth.token);
       router.replace("/(tabs)/settings/me");
     } catch (error: any) {
       setFormError(error?.message ?? "Sign up failed. Please try again later.");

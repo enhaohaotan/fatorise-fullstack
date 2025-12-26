@@ -4,6 +4,7 @@ export default function TasksLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="me" options={{ headerShown: false }} />
       <Stack.Screen
         name="signin"
         options={{ presentation: "modal", title: "Sign In" }}

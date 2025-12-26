@@ -1,13 +1,23 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Text, useThemeColor, View } from "@/components/Themed";
-import { router } from "expo-router";
+import { router, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { getToken } from "@/src/utils/token";
 
 export default function SettingsScreen() {
   const borderColor = useThemeColor({}, "borderColor");
-  const signUpButtonColor = useThemeColor({}, "text");
-  const signUpTextColor = useThemeColor({}, "background");
-  const signInButtonColor = useThemeColor({}, "background");
-  const signInTextColor = useThemeColor({}, "text");
+  const textColor = useThemeColor({}, "text");
+  const bgColor = useThemeColor({}, "background");
+
+  const router = useRouter();
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+      if (token) {
+        router.replace("/(tabs)/settings/me");
+      }
+    })();
+  }, [router]);
 
   function handleSignIn() {
     router.push("/(tabs)/settings/signin");
@@ -23,26 +33,22 @@ export default function SettingsScreen() {
         <Pressable
           style={({ pressed }) => [
             styles.button,
-            { borderColor, backgroundColor: signInButtonColor },
+            { borderColor, backgroundColor: bgColor },
             pressed && styles.buttonPressed,
           ]}
           onPress={handleSignIn}
         >
-          <Text style={[styles.buttonText, { color: signInTextColor }]}>
-            Sign in
-          </Text>
+          <Text style={[styles.buttonText, { color: textColor }]}>Sign in</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) => [
             styles.button,
-            { borderColor, backgroundColor: signUpButtonColor },
+            { borderColor, backgroundColor: textColor },
             pressed && styles.buttonPressed,
           ]}
           onPress={handleSignUp}
         >
-          <Text style={[styles.buttonText, { color: signUpTextColor }]}>
-            Sign up
-          </Text>
+          <Text style={[styles.buttonText, { color: bgColor }]}>Sign up</Text>
         </Pressable>
       </View>
     </View>

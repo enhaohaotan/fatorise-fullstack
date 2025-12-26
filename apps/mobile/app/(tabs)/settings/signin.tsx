@@ -12,6 +12,7 @@ import { SignInBody, SignInBodySchema } from "@repo/shared";
 import * as z from "zod";
 import { signIn } from "@/src/api/auth";
 import { router } from "expo-router";
+import { saveToken } from "@/src/utils/token";
 
 export default function SignInScreen() {
   const borderColor = useThemeColor({}, "borderColor");
@@ -54,6 +55,7 @@ export default function SignInScreen() {
     try {
       setSubmitting(true);
       const auth = await signIn(input);
+      await saveToken(auth.token);
       router.replace("/(tabs)/settings/me");
     } catch (error: any) {
       setFormError(error?.message ?? "Sign in failed. Please try again later.");
@@ -100,7 +102,7 @@ export default function SignInScreen() {
             autoCorrect={false}
             placeholder="••••••••"
             placeholderTextColor={textColor + "80"}
-            textContentType="newPassword"
+            textContentType="password"
             style={[
               styles.input,
               { borderColor, color: textColor },
