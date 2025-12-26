@@ -3,14 +3,19 @@ import { Stack } from "expo-router";
 export default function TasksLayout() {
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ title: "Task list index" }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
-        name="(modal)/create"
-        options={{ presentation: "modal", title: "Create new task" }}
+        name="[id]"
+        options={{ presentation: "modal", title: "Task" }}
       />
-      {/* 下面这些你需要时再打开 */}
-      {/* <Stack.Screen name="create" options={{ title: "New task" }} /> */}
-      {/* <Stack.Screen name="[id]" options={{ title: "Task" }} /> */}
+      <Stack.Screen
+        name="create"
+        options={{ presentation: "modal", title: "New task" }}
+      />
+      <Stack.Screen
+        name="(edit)/[id]"
+        options={{ presentation: "modal", title: "Edit task" }}
+      />
     </Stack>
   );
 }

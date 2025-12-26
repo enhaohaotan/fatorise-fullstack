@@ -35,7 +35,7 @@ export default function TabLayout() {
           tabBarLabel: "Tasks",
           tabBarIcon: ({ color }) => <TabBarIcon name="tasks" color={color} />,
           headerRight: () => (
-            <Link href="/(tabs)/tasks/(modal)/create" asChild>
+            <Link href="/(tabs)/tasks/create" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
