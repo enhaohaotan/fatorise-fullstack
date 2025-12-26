@@ -8,58 +8,55 @@ import {
 } from "react-native";
 import { Text, useThemeColor, View } from "@/components/Themed";
 import { useMemo, useState } from "react";
-import { SignUpBody, SignUpBodySchema } from "@repo/shared";
+import { SignInBody, SignInBodySchema } from "@repo/shared";
 import * as z from "zod";
-import { signUp } from "@/src/api/auth";
+import { signIn } from "@/src/api/auth";
 import { router } from "expo-router";
 
-export default function SignUpScreen() {
+export default function SignInScreen() {
   const borderColor = useThemeColor({}, "borderColor");
   const textColor = useThemeColor({}, "text");
   const bgColor = useThemeColor({}, "background");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<
-    Partial<Record<keyof SignUpBody, string>>
+    Partial<Record<keyof SignInBody, string>>
   >({});
 
   const canSubmit = useMemo(() => {
     return email.trim().length > 0 && password.length > 0 && !submitting;
-  }, [email, password, name]);
+  }, [email, password]);
 
   async function handleSignUp() {
     setFormError(null);
     setFieldErrors({});
 
-    const input: SignUpBody = {
+    const input: SignInBody = {
       email: email.trim(),
       password,
-      name: name.trim().length > 0 ? name.trim() : undefined,
     };
 
-    const parsed = SignUpBodySchema.safeParse(input);
+    const parsed = SignInBodySchema.safeParse(input);
     if (!parsed.success) {
       const { formErrors, fieldErrors } = z.flattenError(parsed.error);
       setFormError(formErrors[0] ?? "Please check the highlighted fields.");
       setFieldErrors({
         email: fieldErrors.email?.[0],
         password: fieldErrors.password?.[0],
-        name: fieldErrors.name?.[0],
       });
       return;
     }
 
     try {
       setSubmitting(true);
-      const auth = await signUp(input);
+      const auth = await signIn(input);
       router.replace("/(tabs)/settings/me");
     } catch (error: any) {
-      setFormError(error?.message ?? "Sign up failed. Please try again later.");
+      setFormError(error?.message ?? "Sign in failed. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -70,7 +67,7 @@ export default function SignUpScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>Create New Account</Text>
+        <Text style={styles.title}>Your Account</Text>
         {formError ? <Text style={styles.formError}>{formError}</Text> : null}
         <View style={styles.field}>
           <Text style={styles.label}>Email*</Text>
@@ -114,26 +111,6 @@ export default function SignUpScreen() {
             <Text style={styles.fieldError}>{fieldErrors.password}</Text>
           ) : null}
         </View>
-        <View style={styles.field}>
-          <Text style={styles.label}>Name (optional)</Text>
-          <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder="John Doe"
-            placeholderTextColor={textColor + "80"}
-            autoCapitalize="words"
-            autoCorrect={false}
-            textContentType="name"
-            style={[
-              styles.input,
-              { borderColor, color: textColor },
-              fieldErrors.name && styles.inputError,
-            ]}
-          />
-          {fieldErrors.name ? (
-            <Text style={styles.fieldError}>{fieldErrors.name}</Text>
-          ) : null}
-        </View>
 
         <Pressable
           disabled={!canSubmit}
@@ -148,7 +125,7 @@ export default function SignUpScreen() {
           {submitting ? (
             <ActivityIndicator />
           ) : (
-            <Text style={[styles.buttonText, { color: bgColor }]}>Sign up</Text>
+            <Text style={[styles.buttonText, { color: bgColor }]}>Sign in</Text>
           )}
         </Pressable>
       </View>
