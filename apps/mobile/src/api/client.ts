@@ -51,7 +51,10 @@ export async function request<T>(
     });
   }
   if ("error" in parsed.data) {
-    throw new ApiError(parsed.data.error);
+    throw new ApiError({
+      status: res.status,
+      ...parsed.data.error,
+    });
   }
   return parsed.data.data;
 }

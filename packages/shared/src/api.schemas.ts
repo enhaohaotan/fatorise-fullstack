@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-export const ApiErrorPayloadSchema = z.object({
-  status: z.number().int().min(100).max(599),
+export const ApiErrorBodySchema = z.object({
   code: z.string().min(1),
   message: z.string().min(1),
   details: z.unknown().optional(),
@@ -10,8 +9,11 @@ export const ApiErrorPayloadSchema = z.object({
 export function ApiEnvelopeSchema<T>(dataSchema: z.ZodType<T>) {
   return z.union([
     z.object({ data: dataSchema }),
-    z.object({ error: ApiErrorPayloadSchema }),
+    z.object({ error: ApiErrorBodySchema }),
   ]);
 }
 
-export type ApiErrorPayload = z.infer<typeof ApiErrorPayloadSchema>;
+export type ApiErrorBody = z.infer<typeof ApiErrorBodySchema>;
+export type ApiErrorPayload = ApiErrorBody & {
+  status: number;
+};
