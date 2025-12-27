@@ -8,22 +8,10 @@ import {
 } from "react-native";
 import { Text, useThemeColor, View } from "@/components/Themed";
 import { useEffect, useMemo, useState } from "react";
-import {
-  SignInBody,
-  SignInBodySchema,
-  TaskDto,
-  TaskId,
-  TaskIdParamsSchema,
-  UpdateTaskBody,
-  UpdateTaskBodySchema,
-} from "@repo/shared";
+import { TaskDto, UpdateTaskBody, UpdateTaskBodySchema } from "@repo/shared";
 import * as z from "zod";
-import { signIn } from "@/src/api/auth";
-import { router, useLocalSearchParams } from "expo-router";
-import { saveToken } from "@/src/utils/token";
-import { emitAuthEvent } from "@/src/utils/authEvents";
+import { useLocalSearchParams } from "expo-router";
 import { getTask, updateTask } from "@/src/api/tasks";
-import { ClientError } from "@/src/utils/clientError";
 
 export default function TaskInfoScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -91,9 +79,35 @@ export default function TaskInfoScreen() {
       setSubmitting(false);
     }
   }
+  if (loading) {
+    return (
+      <View style={styles.card}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>Error</Text>
+        <Text style={styles.error}>{error}</Text>
+        <Pressable
+          onPress={load}
+          style={({ pressed }) => [
+            styles.retryButton,
+            { borderColor, backgroundColor: textColor },
+            pressed && styles.buttonPressed,
+          ]}
+        >
+          <Text style={[styles.buttonText, { color: bgColor }]}>Retry</Text>
+        </Pressable>
+      </View>
+    );
+  }
   if (!task) {
     return (
-      <View style={[styles.container, { backgroundColor: bgColor }]}>
+      <View style={[styles.card, { backgroundColor: bgColor }]}>
         <Text style={styles.title}>No Task Found</Text>
       </View>
     );
@@ -168,6 +182,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  card: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   content: {
     flex: 1,
     marginTop: 50,
@@ -194,11 +213,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
   button: {
     borderRadius: 2,
     paddingVertical: 8,
@@ -206,6 +220,15 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignItems: "center",
     borderWidth: 1,
+  },
+  retryButton: {
+    borderRadius: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginTop: 30,
+    alignItems: "center",
+    borderWidth: 1,
+    width: "80%",
   },
   buttonText: {
     fontSize: 16,
@@ -217,4 +240,5 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     minHeight: 100,
   },
+  error: { color: "#b00020", fontSize: 16 },
 });
