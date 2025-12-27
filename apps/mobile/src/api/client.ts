@@ -1,6 +1,6 @@
 import { ApiEnvelopeSchema } from "@repo/shared";
 import { z } from "zod";
-import { ApiError } from "../utils/apiErrpr";
+import { ApiError } from "../utils/apiError";
 
 type RequestOptions = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";

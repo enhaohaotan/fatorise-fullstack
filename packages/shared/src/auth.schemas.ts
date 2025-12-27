@@ -37,6 +37,13 @@ export const AuthDtoSchema = z.object({
   }),
 });
 
+export const MeDtoSchema = z.object({
+  id: z.uuid(),
+  email: z.email(),
+  name: z.string().max(255).nullable(),
+});
+
 export type SignUpBody = z.infer<typeof SignUpBodySchema>;
 export type SignInBody = z.infer<typeof SignInBodySchema>;
 export type AuthDto = z.infer<typeof AuthDtoSchema>;
+export type MeDto = z.infer<typeof MeDtoSchema>;
