@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { Text, useThemeColor, View } from "@/components/Themed";
 import { useEffect, useState } from "react";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { TaskDto, UpdateTaskBody, UpdateTaskBodySchema } from "@repo/shared";
 import { deleteTask, getTasks, updateTask } from "@/src/api/tasks";
 import { onAuthEvent } from "@/src/utils/authEvents";
@@ -158,12 +158,14 @@ export default function TasksScreen() {
               </Pressable>
             </Link>
             <Pressable onPress={() => onDeleteTask(item)} style={styles.check}>
-              <Ionicons
-                name="trash-outline"
-                size={20}
-                style={styles.checkText}
-                color={textColor}
-              />
+              {({ pressed }) => (
+                <Ionicons
+                  name="trash-outline"
+                  size={20}
+                  style={[styles.checkText, { opacity: pressed ? 0.5 : 1 }]}
+                  color={textColor}
+                />
+              )}
             </Pressable>
           </View>
         )}

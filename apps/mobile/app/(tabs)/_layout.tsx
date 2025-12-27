@@ -1,19 +1,12 @@
 import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { Ionicons } from "@expo/vector-icons";
+import { getToken } from "@/src/utils/token";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -21,7 +14,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].text,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
@@ -33,21 +26,29 @@ export default function TabLayout() {
         options={{
           title: "Task list",
           tabBarLabel: "Tasks",
-          tabBarIcon: ({ color }) => <TabBarIcon name="tasks" color={color} />,
-          headerRight: () => (
-            <Link href="/(tabs)/tasks/create" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="plus"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="list-outline" size={28} color={color} />
           ),
+          headerRight: () => {
+            const token = getToken();
+            if (!token) {
+              return null;
+            }
+            return (
+              <Link href="/(tabs)/tasks/create" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Ionicons
+                      name="add-outline"
+                      size={28}
+                      color={Colors[colorScheme ?? "light"].text}
+                      style={{ marginRight: 20, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              </Link>
+            );
+          },
         }}
       />
       <Tabs.Screen
@@ -55,7 +56,9 @@ export default function TabLayout() {
         options={{
           title: "Settings",
           tabBarLabel: "Settings",
-          tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="settings-outline" size={28} color={color} />
+          ),
         }}
       />
     </Tabs>
