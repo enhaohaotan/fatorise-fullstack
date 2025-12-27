@@ -9,4 +9,4 @@ export const TaskDtoSchema = z.object({
   updatedAt: z.string(),
 });
 
-export type Task = z.infer<typeof TaskDtoSchema>;
+export type TaskDto = z.infer<typeof TaskDtoSchema>;
