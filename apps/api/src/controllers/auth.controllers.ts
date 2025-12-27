@@ -23,3 +23,14 @@ export async function postUserSignIn(req: Request, res: Response) {
     },
   });
 }
+
+export async function getMe(req: Request, res: Response) {
+  const user = await Auth.userInfo(req.user!.id);
+  res.status(200).json({
+    data: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    },
+  });
+}
