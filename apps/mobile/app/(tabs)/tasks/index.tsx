@@ -8,12 +8,12 @@ import { Text, useThemeColor, View } from "@/components/Themed";
 import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { TaskDto, UpdateTaskBody, UpdateTaskBodySchema } from "@repo/shared";
-import { getTasks, updateTask } from "@/src/api/tasks";
-import { emitAuthEvent, onAuthEvent } from "@/src/utils/authEvents";
+import { deleteTask, getTasks, updateTask } from "@/src/api/tasks";
+import { onAuthEvent } from "@/src/utils/authEvents";
 import * as z from "zod";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TasksScreen() {
-  const router = useRouter();
   const borderColor = useThemeColor({}, "borderColor");
   const textColor = useThemeColor({}, "text");
   const bgColor = useThemeColor({}, "background");
@@ -22,7 +22,6 @@ export default function TasksScreen() {
   const [error, setError] = useState<string | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
 
   async function onToggleTaskCompleted(task: TaskDto) {
     const input: UpdateTaskBody = {
@@ -31,7 +30,7 @@ export default function TasksScreen() {
     const parsed = UpdateTaskBodySchema.safeParse(input);
     if (!parsed.success) {
       const { formErrors } = z.flattenError(parsed.error);
-      setFormError(formErrors[0] ?? "Please check the highlighted fields.");
+      setError(formErrors[0] ?? "Please check the highlighted fields.");
       return;
     }
     try {
@@ -39,6 +38,15 @@ export default function TasksScreen() {
       setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
     } catch (error: any) {
       setError(error?.message ?? "Complete failed. Please try again later.");
+    }
+  }
+
+  async function onDeleteTask(task: TaskDto) {
+    try {
+      await deleteTask(task.id);
+      setTasks((prev) => prev.filter((t) => t.id !== task.id));
+    } catch (error: any) {
+      setError(error?.message ?? "Delete failed. Please try again later.");
     }
   }
 
@@ -116,7 +124,21 @@ export default function TasksScreen() {
               onPress={() => onToggleTaskCompleted(item)}
               style={styles.check}
             >
-              <Text style={styles.checkText}>{item.completed ? "☑" : "☐"}</Text>
+              {item.completed ? (
+                <Ionicons
+                  name="checkbox-outline"
+                  size={20}
+                  style={styles.checkText}
+                  color={textColor}
+                />
+              ) : (
+                <Ionicons
+                  name="square-outline"
+                  size={20}
+                  style={styles.checkText}
+                  color={textColor}
+                />
+              )}
             </Pressable>
             <Link href={`/(tabs)/tasks/${item.id}`} asChild>
               <Pressable style={{ flex: 1 }}>
@@ -135,6 +157,14 @@ export default function TasksScreen() {
                 </View>
               </Pressable>
             </Link>
+            <Pressable onPress={() => onDeleteTask(item)} style={styles.check}>
+              <Ionicons
+                name="trash-outline"
+                size={20}
+                style={styles.checkText}
+                color={textColor}
+              />
+            </Pressable>
           </View>
         )}
       />

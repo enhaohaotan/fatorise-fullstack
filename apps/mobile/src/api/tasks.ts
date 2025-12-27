@@ -1,7 +1,15 @@
-import { CreateTaskBody, TaskDto, TaskDtoSchema, TaskId, UpdateTaskBody } from "@repo/shared";
+import {
+  CreateTaskBody,
+  TaskDto,
+  TaskDtoSchema,
+  TaskId,
+  TaskIdParamsSchema,
+  UpdateTaskBody,
+} from "@repo/shared";
 import { ClientError } from "../utils/clientError";
 import { getToken } from "../utils/token";
 import { request } from "./client";
+import * as z from "zod";
 
 export async function getTasks() {
   const token = await getToken();
@@ -39,6 +47,17 @@ export async function createTask(input: CreateTaskBody) {
   return request<TaskDto>(`/tasks`, TaskDtoSchema, {
     method: "POST",
     body: input,
+    token,
+  });
+}
+
+export async function deleteTask(id: string) {
+  const token = await getToken();
+  if (!token) {
+    throw new ClientError("NO_TOKEN", "You need to sign in first.");
+  }
+  return request(`/tasks/${id}`, z.void(), {
+    method: "DELETE",
     token,
   });
 }

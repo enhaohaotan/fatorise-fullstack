@@ -41,6 +41,9 @@ export async function request<T>(
   });
 
   const payload = await parseJsonSafe(res);
+  if (payload === undefined) {
+    return undefined as T;
+  }
   const parsed = ApiEnvelopeSchema(schema).safeParse(payload);
   if (!parsed.success) {
     throw new ApiError({
