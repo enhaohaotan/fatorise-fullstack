@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getMe } from "@/src/api/auth";
 import { ApiError } from "@/src/utils/apiError";
 import { ClientError } from "@/src/utils/clientError";
+import { emitAuthEvent } from "@/src/utils/authEvents";
 
 export default function UserScreen() {
   const borderColor = useThemeColor({}, "borderColor");
@@ -46,18 +47,12 @@ export default function UserScreen() {
 
   async function handleSignOut() {
     await clearToken();
+    emitAuthEvent();
     router.replace("/(tabs)/settings");
   }
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      await load();
-      if (cancelled) return;
-    })();
-    return () => {
-      cancelled = true;
-    };
+    load();
   }, []);
 
   if (loading) {

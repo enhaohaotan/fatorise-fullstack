@@ -13,6 +13,7 @@ import * as z from "zod";
 import { signIn } from "@/src/api/auth";
 import { router } from "expo-router";
 import { saveToken } from "@/src/utils/token";
+import { emitAuthEvent } from "@/src/utils/authEvents";
 
 export default function SignInScreen() {
   const borderColor = useThemeColor({}, "borderColor");
@@ -56,7 +57,8 @@ export default function SignInScreen() {
       setSubmitting(true);
       const auth = await signIn(input);
       await saveToken(auth.token);
-      router.replace("/(tabs)/settings/me");
+      emitAuthEvent();
+      router.replace("/(tabs)/tasks");
     } catch (error: any) {
       setFormError(error?.message ?? "Sign in failed. Please try again later.");
     } finally {

@@ -11,6 +11,7 @@ import { Link, useRouter } from "expo-router";
 import { TaskDto } from "@repo/shared";
 import { getTasks } from "@/src/api/tasks";
 import { useFocusEffect } from "@react-navigation/native";
+import { onAuthEvent } from "@/src/utils/authEvents";
 
 export default function TasksScreen() {
   const router = useRouter();
@@ -35,18 +36,16 @@ export default function TasksScreen() {
     }
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      let cancelled = false;
-      (async () => {
-        await load();
-        if (cancelled) return;
-      })();
-      return () => {
-        cancelled = true;
-      };
-    }, [])
-  );
+  useEffect(() => {
+    load();
+  }, []);
+
+  useEffect(() => {
+    const off = onAuthEvent(async () => {
+      await load();
+    });
+    return off;
+  }, []);
 
   if (loading) {
     return (
