@@ -1,8 +1,18 @@
 @baseUrl = http://localhost:3000
 @contentType = application/json
+@invalidId = not-a-uuid
 
 ### Health Check
 GET {{baseUrl}}/health
+
+### Signup (invalid email)
+POST {{baseUrl}}/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "email": "not-an-email",
+  "password": "12345678"
+}
 
 ### Signup without name
 POST {{baseUrl}}/auth/signup
@@ -23,6 +33,15 @@ Content-Type: {{contentType}}
   "name": "Test User"
 }
 
+### Signup duplicate (expect 409)
+POST {{baseUrl}}/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "email": "test1@example.com",
+  "password": "12345678"
+}
+
 ### Signin
 POST {{baseUrl}}/auth/signin
 Content-Type: {{contentType}}
@@ -41,6 +60,18 @@ Content-Type: {{contentType}}
   "password": "wrongpassword"
 }
 
+### Signin (invalid email)
+POST {{baseUrl}}/auth/signin
+Content-Type: {{contentType}}
+
+{
+  "email": "not-an-email",
+  "password": "12345678"
+}
+
+### Auth me (unauthorized)
+GET {{baseUrl}}/auth/me
+
 ###
 # @name signin
 POST {{baseUrl}}/auth/signin
@@ -53,6 +84,19 @@ Content-Type: {{contentType}}
 
 ###
 @token = {{signin.response.body.$.data.token}}
+
+### Auth me
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### Create Task (missing title)
+POST {{baseUrl}}/tasks
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "description": "Missing title should fail"
+}
 
 ### Create Task
 # @name task
@@ -72,18 +116,53 @@ Authorization: Bearer {{token}}
 ###
 @taskId = {{task.response.body.$.data.id}}
 
+### Get Task Info
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+
 ### Update Task
 PATCH {{baseUrl}}/tasks/{{taskId}}
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
 {
+  "title": "Updated title",
+  "description": "Updated description",
   "completed": true
+}
+
+### Clear description (empty string -> null)
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "description": ""
+}
+
+### Update Task (empty body)
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+}
+
+### Update Task (invalid id)
+PATCH {{baseUrl}}/tasks/{{invalidId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "completed": false
 }
 
 ### Delete Task
 DELETE {{baseUrl}}/tasks/{{taskId}}
-content-Type: {{contentType}}
+Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
+### Get Deleted Task
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{token}}
 
