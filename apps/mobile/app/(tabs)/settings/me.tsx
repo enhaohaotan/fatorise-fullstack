@@ -30,7 +30,7 @@ export default function UserScreen() {
       const me = await getMe();
       setUser(me);
     } catch (e) {
-      if (e instanceof ApiError && e.status === 401) {
+      if (e instanceof ApiError) {
         await clearToken();
         router.replace("/(tabs)/settings");
         return;
