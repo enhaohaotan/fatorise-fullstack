@@ -7,9 +7,10 @@ import {
 import { Text, useThemeColor, View } from "@/components/Themed";
 import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
-import { TaskDto } from "@repo/shared";
-import { getTasks } from "@/src/api/tasks";
-import { onAuthEvent } from "@/src/utils/authEvents";
+import { TaskDto, UpdateTaskBody, UpdateTaskBodySchema } from "@repo/shared";
+import { getTasks, updateTask } from "@/src/api/tasks";
+import { emitAuthEvent, onAuthEvent } from "@/src/utils/authEvents";
+import * as z from "zod";
 
 export default function TasksScreen() {
   const router = useRouter();
@@ -21,6 +22,25 @@ export default function TasksScreen() {
   const [error, setError] = useState<string | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  async function onToggleTaskCompleted(task: TaskDto) {
+    const input: UpdateTaskBody = {
+      completed: !task.completed,
+    };
+    const parsed = UpdateTaskBodySchema.safeParse(input);
+    if (!parsed.success) {
+      const { formErrors } = z.flattenError(parsed.error);
+      setFormError(formErrors[0] ?? "Please check the highlighted fields.");
+      return;
+    }
+    try {
+      const updated = await updateTask(parsed.data, task.id);
+      setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+    } catch (error: any) {
+      setError(error?.message ?? "Complete failed. Please try again later.");
+    }
+  }
 
   async function load() {
     setLoading(true);
@@ -92,7 +112,10 @@ export default function TasksScreen() {
         ListEmptyComponent={<Text style={styles.empty}>No tasks yet.</Text>}
         renderItem={({ item }) => (
           <View style={[styles.row, { borderColor }]}>
-            <Pressable style={styles.check}>
+            <Pressable
+              onPress={() => onToggleTaskCompleted(item)}
+              style={styles.check}
+            >
               <Text style={styles.checkText}>{item.completed ? "☑" : "☐"}</Text>
             </Pressable>
             <Link href={`/(tabs)/tasks/${item.id}`} asChild>
