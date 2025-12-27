@@ -2,7 +2,7 @@ import { ApiErrorPayload } from "@repo/shared";
 
 export class ApiError extends Error {
   status: number;
-  code?: string;
+  code: string;
   details?: unknown;
 
   constructor(payload: ApiErrorPayload) {
