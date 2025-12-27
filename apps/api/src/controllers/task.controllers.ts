@@ -22,3 +22,9 @@ export async function deleteTask(req: Request, res: Response) {
   await Task.deleteTask(req.user!.id, id);
   res.status(204).send();
 }
+
+export async function getTaskInfo(req: Request, res: Response) {
+  const { id } = req.params as { id: string };
+  const task = await Task.taskInfo(req.user!.id, id);
+  res.status(200).json({ data: task });
+}

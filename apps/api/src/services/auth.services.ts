@@ -39,3 +39,13 @@ export async function signIn(input: SignInBody) {
   }
   return user;
 }
+
+export async function userInfo(id: string) {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+  if (!user) {
+    throw new HttpError(404, "NOT_FOUND", "User not found");
+  }
+  return user;
+}

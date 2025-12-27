@@ -10,27 +10,33 @@ import {
   validateBody,
   validateParams,
 } from "../middlewares/validate.middlewares.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const tasksRouter = Router();
 
 tasksRouter.use(requireAuth);
 
-tasksRouter.get("/", TaskController.getTasks);
+tasksRouter.get("/", asyncHandler(TaskController.getTasks));
 tasksRouter.post(
   "/",
   validateBody(CreateTaskBodySchema),
-  TaskController.postTask
+  asyncHandler(TaskController.postTask)
 );
 tasksRouter.patch(
   "/:id",
   validateParams(TaskIdParamsSchema),
   validateBody(UpdateTaskBodySchema),
-  TaskController.patchTask
+  asyncHandler(TaskController.patchTask)
 );
 tasksRouter.delete(
   "/:id",
   validateParams(TaskIdParamsSchema),
-  TaskController.deleteTask
+  asyncHandler(TaskController.deleteTask)
+);
+tasksRouter.get(
+  "/:id",
+  validateParams(TaskIdParamsSchema),
+  asyncHandler(TaskController.getTaskInfo)
 );
 
 export default tasksRouter;

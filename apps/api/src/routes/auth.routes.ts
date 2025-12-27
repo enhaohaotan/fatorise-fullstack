@@ -6,6 +6,7 @@ import {
 } from "../validaiton/user.schemas.js";
 import * as UserController from "../controllers/auth.controllers.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { requireAuth } from "../middlewares/auth.middelwares.js";
 
 export const authRouter = Router();
 
@@ -20,3 +21,5 @@ authRouter.post(
   validateBody(SignInBodySchema),
   asyncHandler(UserController.postUserSignIn)
 );
+
+authRouter.get("/me", requireAuth, asyncHandler(UserController.getMe));
