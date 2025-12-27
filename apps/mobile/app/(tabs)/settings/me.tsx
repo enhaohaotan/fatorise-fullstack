@@ -50,9 +50,14 @@ export default function UserScreen() {
   }
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       await load();
+      if (cancelled) return;
     })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (loading) {

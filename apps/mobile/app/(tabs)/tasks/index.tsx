@@ -5,11 +5,12 @@ import {
   StyleSheet,
 } from "react-native";
 import { Text, useThemeColor, View } from "@/components/Themed";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 // import type { Task } from "@repo/shared";
 import { Link, useRouter } from "expo-router";
 import { TaskDto } from "@repo/shared";
 import { getTasks } from "@/src/api/tasks";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function TasksScreen() {
   const router = useRouter();
@@ -34,11 +35,18 @@ export default function TasksScreen() {
     }
   }
 
-  useEffect(() => {
-    (async () => {
-      await load();
-    })();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      (async () => {
+        await load();
+        if (cancelled) return;
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, [])
+  );
 
   if (loading) {
     return (
