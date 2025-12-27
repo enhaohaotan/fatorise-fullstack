@@ -46,10 +46,13 @@ copy apps\\mobile\\.env.example apps\\mobile\\.env
 
 Set `EXPO_PUBLIC_API_BASE_URL` to your API URL (use your LAN IP when testing on a device).
 
-4. Run Prisma migrations (from repo root):
+4. Run Prisma migrations and generate Prisma Client (from repo root):
 
 ```
-npx prisma migrate dev --schema apps/api/prisma/schema.prisma
+npx prisma migrate dev --schema apps/api/prisma/schema.prisma --config apps/api/prisma.config.ts
+
+npx prisma generate --schema apps/api/prisma/schema.prisma
+
 ```
 
 ## Run

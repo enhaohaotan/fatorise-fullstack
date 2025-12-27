@@ -227,7 +227,3 @@ Common: send `Authorization: Bearer <token>`. All operations are scoped to the a
 | userId      | string (UUID)     | yes      | Owner user id; indexed.     |
 | createdAt   | string (ISO 8601) | auto     | Creation timestamp.         |
 | updatedAt   | string (ISO 8601) | auto     | Last update timestamp.      |
-
-```
-
-```
