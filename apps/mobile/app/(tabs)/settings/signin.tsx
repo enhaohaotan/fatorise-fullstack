@@ -55,7 +55,7 @@ export default function SignInScreen() {
 
     try {
       setSubmitting(true);
-      const auth = await signIn(input);
+      const auth = await signIn(parsed.data);
       await saveToken(auth.token);
       emitAuthEvent();
       router.replace("/(tabs)/tasks");

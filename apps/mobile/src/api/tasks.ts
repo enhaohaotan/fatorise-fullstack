@@ -1,4 +1,4 @@
-import { TaskDto, TaskDtoSchema } from "@repo/shared";
+import { TaskDto, TaskDtoSchema, TaskId, UpdateTaskBody } from "@repo/shared";
 import { ClientError } from "../utils/clientError";
 import { getToken } from "../utils/token";
 import { request } from "./client";
@@ -9,4 +9,24 @@ export async function getTasks() {
     throw new ClientError("NO_TOKEN", "You need to sign in first.");
   }
   return request<TaskDto[]>("/tasks", TaskDtoSchema.array(), { token });
+}
+
+export async function getTask(id: string) {
+  const token = await getToken();
+  if (!token) {
+    throw new ClientError("NO_TOKEN", "You need to sign in first.");
+  }
+  return request<TaskDto>(`/tasks/${id}`, TaskDtoSchema, { token });
+}
+
+export async function updateTask(input: UpdateTaskBody, id: string) {
+  const token = await getToken();
+  if (!token) {
+    throw new ClientError("NO_TOKEN", "You need to sign in first.");
+  }
+  return request<TaskDto>(`/tasks/${id}`, TaskDtoSchema, {
+    method: "PATCH",
+    body: input,
+    token,
+  });
 }

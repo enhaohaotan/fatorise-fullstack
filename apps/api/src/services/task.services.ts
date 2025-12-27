@@ -60,3 +60,13 @@ export async function deleteTask(userId: string, id: string) {
 
   return true;
 }
+
+export async function taskInfo(userId: string, id: string) {
+  const task = await prisma.task.findMany({
+    where: { id, userId },
+  });
+  if (task.length === 0) {
+    throw new HttpError(404, "NOT_FOUND", "Task not found");
+  }
+  return task[0];
+}

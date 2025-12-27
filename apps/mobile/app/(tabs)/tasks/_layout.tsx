@@ -6,15 +6,11 @@ export default function TasksLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
         name="[id]"
-        options={{ presentation: "modal", title: "Task" }}
+        options={{ presentation: "modal", headerShown: false }}
       />
       <Stack.Screen
         name="create"
-        options={{ presentation: "modal", title: "New task" }}
-      />
-      <Stack.Screen
-        name="(edit)/[id]"
-        options={{ presentation: "modal", title: "Edit task" }}
+        options={{ presentation: "modal", headerShown: false }}
       />
     </Stack>
   );

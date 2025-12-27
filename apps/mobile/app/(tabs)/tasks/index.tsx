@@ -5,12 +5,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { Text, useThemeColor, View } from "@/components/Themed";
-import { useCallback, useEffect, useState } from "react";
-// import type { Task } from "@repo/shared";
+import { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { TaskDto } from "@repo/shared";
 import { getTasks } from "@/src/api/tasks";
-import { useFocusEffect } from "@react-navigation/native";
 import { onAuthEvent } from "@/src/utils/authEvents";
 
 export default function TasksScreen() {
@@ -22,6 +20,7 @@ export default function TasksScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tasks, setTasks] = useState<TaskDto[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -46,6 +45,12 @@ export default function TasksScreen() {
     });
     return off;
   }, []);
+
+  async function onRefresh() {
+    setRefreshing(true);
+    await load();
+    setRefreshing(false);
+  }
 
   if (loading) {
     return (
@@ -79,6 +84,8 @@ export default function TasksScreen() {
       <FlatList
         data={tasks}
         keyExtractor={(t) => t.id}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
         contentContainerStyle={
           tasks.length === 0 ? styles.emptyWrap : undefined
         }

@@ -33,5 +33,10 @@ tasksRouter.delete(
   validateParams(TaskIdParamsSchema),
   asyncHandler(TaskController.deleteTask)
 );
+tasksRouter.get(
+  "/:id",
+  validateParams(TaskIdParamsSchema),
+  asyncHandler(TaskController.getTaskInfo)
+);
 
 export default tasksRouter;
