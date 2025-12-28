@@ -61,7 +61,7 @@ export default function SignUpScreen() {
       const auth = await signUp(parsed.data);
       await saveToken(auth.token);
       emitAuthEvent();
-      router.replace("/(tabs)/tasks");
+      router.replace("/(tabs)/settings");
     } catch (error: any) {
       setFormError(error?.message ?? "Sign up failed. Please try again later.");
     } finally {

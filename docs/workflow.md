@@ -69,25 +69,6 @@ git commit -m "feat(scope): your message"
 git push -u origin feature/your-feature-name
 
 # 5. Open PR on GitHub → Squash merge after review
-
-# 6. Clean up local branch
-git checkout main
-git pull origin main
-git branch -d feature/your-feature-name
-```
-
-### 4.2 Keeping Branch Up-to-Date
-
-When your feature branch is behind `main`:
-
-```bash
-# Option 1: Rebase (preferred for clean history)
-git fetch origin
-git rebase origin/main
-
-# Option 2: Merge (if rebase causes too many conflicts)
-git fetch origin
-git merge origin/main
 ```
 
 ## 5. Pull Request Guidelines
