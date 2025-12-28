@@ -76,3 +76,54 @@ See `docs/structure.md` for endpoints and data shapes.
 ## Manual API Tests
 
 Use `apps/api/src/tests/api.http` in VS Code REST Client to run through the flow.
+
+## UI Screenshots
+
+<figure>
+  <img src="docs/screenshots/create-task-modal.png" alt="Create task modal" style="width:50%;">
+  <figcaption>Create task modal</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/edit-task-modal.png" alt="Edit task modal" style="width:50%;">
+  <figcaption>Edit task modal</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/signin-modal.png" alt="Sign in modal" style="width:50%;">
+  <figcaption>Sign in modal</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/signin-signup-screen.png" alt="Sign in and sign up screen" style="width:50%;">
+  <figcaption>Sign in and sign up screen</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/signin-with-loading-icon.png" alt="Sign in with loading icon" style="width:50%;">
+  <figcaption>Sign in with loading icon</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/signin-with-validation-error.png" alt="Sign in with validation error" style="width:50%;">
+  <figcaption>Sign in with validation error</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/signup-modal.png" alt="Sign up modal" style="width:50%;">
+  <figcaption>Sign up modal</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/signup-with-validation-error.png" alt="Sign up with validation error" style="width:50%;">
+  <figcaption>Sign up with validation error</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/task-list-screen.png" alt="Task list screen" style="width:50%;">
+  <figcaption>Task list screen</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/task-list-with-completed-udpate.png" alt="Task list with completed update" style="width:50%;">
+  <figcaption>Task list with completed update</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/unified-error-screen.png" alt="Unified error screen" style="width:50%;">
+  <figcaption>Unified error screen</figcaption>
+</figure>
+<figure>
+  <img src="docs/screenshots/user-profil-screen-with-signout.png" alt="User profile screen with sign out" style="width:50%;">
+  <figcaption>User profile screen with sign out</figcaption>
+</figure>
