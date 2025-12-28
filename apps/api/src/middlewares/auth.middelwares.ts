@@ -17,6 +17,12 @@ export async function requireAuth(
     req.user = { id: payload.sub! };
     next();
   } catch {
-    return next(new HttpError(401, "UNAUTHORIZED", "Invalid or expired token"));
+    return next(
+      new HttpError(
+        401,
+        "UNAUTHORIZED",
+        "Invalid or expired token, please sign in again"
+      )
+    );
   }
 }

@@ -1,3 +1,3 @@
-export * from "./task.schemas";
-export * from "./auth.schemas";
-export * from "./api.schemas";
+export * from "./task.schemas.js";
+export * from "./auth.schemas.js";
+export * from "./api.schemas.js";
