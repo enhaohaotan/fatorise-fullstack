@@ -8,9 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:api": "npm run dev -w apps/api",
+    "dev:api": "npm run build -w packages/shared && npm run dev -w apps/api",
     "dev:mobile": "npm run start -w apps/mobile",
-    "build:api": "npm run build -w apps/api",
+    "build:api": "npm run build -w packages/shared && npm run build -w apps/api",
     "start:api": "npm run start -w apps/api"
   },
   "engines": {
