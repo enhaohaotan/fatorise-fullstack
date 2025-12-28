@@ -58,7 +58,7 @@ export default function SignInScreen() {
       const auth = await signIn(parsed.data);
       await saveToken(auth.token);
       emitAuthEvent();
-      router.replace("/(tabs)/tasks");
+      router.replace("/(tabs)/settings");
     } catch (error: any) {
       setFormError(error?.message ?? "Sign in failed. Please try again later.");
     } finally {

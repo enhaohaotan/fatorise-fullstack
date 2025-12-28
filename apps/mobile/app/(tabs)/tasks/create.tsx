@@ -74,7 +74,7 @@ export default function TaskInfoScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>Edit task</Text>
+        <Text style={styles.title}>Create task</Text>
         {formError ? <Text style={styles.formError}>{formError}</Text> : null}
         <View style={styles.field}>
           <Text style={styles.label}>Title</Text>
